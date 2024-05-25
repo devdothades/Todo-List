@@ -11,8 +11,7 @@ const createTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
     try {
-        const data = await TaskSchema.find({});
-        res.status(200).json(data);
+        res.status(200).json(await TaskSchema.find({}))
     } catch (error) {
         res.status(404).json({message: error.message});
     }
@@ -23,18 +22,19 @@ const updateTask = async (req, res) => {
     const task = req.body
 
     try {
-        const data = await TaskSchema.findOneAndUpdate({_id: id}, task, {new: true});
-        res.status(200).json({message: "Task Updated", data});
+        res.status(200).json({
+            message: "Task Updated", data: await TaskSchema.findOneAndUpdate({_id: id}, task, {new: true})
+        });
     } catch (error) {
         res.status(404).json({message: error.message});
     }
 }
 
 const deleteTask = async (req, res) => {
-    const {id} = req.params
+
 
     try {
-        await TaskSchema.findByIdAndDelete(id);
+        await TaskSchema.findByIdAndDelete(req.params.id);
         res.status(200).json({message: "Task deleted"});
     } catch (error) {
         res.status(404).json({message: error.message});
