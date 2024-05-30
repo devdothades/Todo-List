@@ -17,6 +17,15 @@ const getTasks = async (req, res) => {
     }
 }
 
+const getTask = async (req, res) => {
+    const {id} = req.params;
+    try {
+        res.status(200).json(await TaskSchema.findById(id));
+    } catch (error) {
+        res.status(404).json({message: error.message});
+    }
+}
+
 const updateTask = async (req, res) => {
     const {id} = req.params
     const task = req.body
@@ -31,17 +40,16 @@ const updateTask = async (req, res) => {
 }
 
 const deleteTask = async (req, res) => {
-
-
+    const {id} = req.params;
     try {
-        await TaskSchema.findByIdAndDelete(req.params.id);
+        await TaskSchema.findByIdAndDelete(id);
         res.status(200).json({message: "Task deleted"});
     } catch (error) {
         res.status(404).json({message: error.message});
     }
 }
 
-export {createTask, getTasks, updateTask, deleteTask};
+export {createTask, getTasks, updateTask, deleteTask, getTask};
 
 
 

@@ -1,7 +1,11 @@
 import mongoose, {Schema} from "mongoose";
+import User from './user.js'
 
 const TaskSchema = new Schema({
-    task: {
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User,
+    }, task: {
         type: String, required: true
     }, status: {
         type: Boolean, default: false
