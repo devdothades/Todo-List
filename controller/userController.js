@@ -7,43 +7,57 @@ import bcrypt from "bcrypt";
 
 
 const signup = async (req, res) => {
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        const user = await UserSchema.create({
-            email: req.body.email,
-            password: hashedPassword
-        })
-        const success = await user.save()
-        res.status(200).json(success)
-    }catch (e) {
-        console.error('Error', e)
-        res.status(500).json({e: 'An error occurred'})
+    const {email, password} = req.body
+
+    if(!validator.isEmail(email)){
+        return res.status(406).json({e: "Invalid Email Address!"})
     }
+
+    if(!validator.isStrongPassword(password)){
+        return res.status(406).json({e: "Password is Weak!"})
+    }
+
+    try{
+        const hash = await bcrypt.hash(password, 10)
+        const user= await UserSchema.create({email, password: hash})
+        res.status(200).json(user)
+    }catch (e){
+        res.status(400).json({ e: "Bad Request", details: e.message });
+    }
+
 }
 
 const login = async (req, res) => {
-    try {
-        const user = await UserSchema.findOne({ email: req.body.email });
-        if (!user) {
-            return res.status(401).json({ status: 'error', error: 'Invalid email' });
+    const {email, password} = req.body;
+
+    try{
+        if(!validator.isEmail(email)){
+            return res.status(406).json({e: "Invalid Email Address!"})
         }
 
-        const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
-        if (isPasswordValid) {
-            const token = jwt.sign(
-                { id: user._id, name: user.name, email: user.email },
-                process.env.JWT_SECRET,
-                { expiresIn: '1h' }
-            );
+        const findUser = await UserSchema.findOne({email: email })
 
-            return res.json({ status: 'ok', token });
-        } else {
-            return res.status(401).json({ status: 'error', error: 'Invalid password' });
+        if(!findUser){
+            return res.status(406).json({e: "Incorrect Password or Invalid Account"})
         }
-    } catch (err) {
-        console.error('Error during login:', err);
+
+        const userPass = findUser.password
+
+        const matchedPassword = bcrypt.compare(password, userPass)
+
+        if(matchedPassword){
+            const token = await jwt.sign({id: findUser._id, email: email}, process.env.JWT_SECRET)
+            res.status(200).json(token)
+        }
+    }catch (e){
+        console.error('Error:', e);
         return res.status(500).json({ status: 'error', error: 'An error occurred during login' });
     }
+
+
+
+
+
 };
 
 export {signup, login};
