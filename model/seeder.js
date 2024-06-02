@@ -1,14 +1,21 @@
 import UserSchema from "./user.js";
 import mongoose from "mongoose";
-import TaskSchema from "./tasks.js";
 
+// Connect to MongoDB database
+//REPLACE THE URI WITH YOUR MONGODB URL, since dotenv is not working for this.
 mongoose.connect('mongodb://localhost:27017/TODOLIST')
-    .then(() =>{
+    .then(() => {
         console.log('connected')
-    }).catch((e) =>{
-        console.log(e)
+    }).catch((e) => {
+    console.log(e)
 })
 
+/**
+ * Seed the database with initial data.
+ * @async
+ * @function seedDB
+ * @returns {Promise<void>}
+ */
 async function seedDB() {
     try {
         // Clear existing data
@@ -23,4 +30,5 @@ async function seedDB() {
     }
 }
 
+// Call the seedDB function to seed the database
 seedDB()

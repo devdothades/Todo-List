@@ -1,6 +1,15 @@
 import TaskSchema from "../model/tasks.js";
+import expressAsyncHandler from "express-async-handler";
 
-const createTask = async (req, res) => {
+/**
+ * Create a new task.
+ * @async
+ * @function createTask
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>}
+ */
+const createTask = expressAsyncHandler(async (req, res) => {
     const {task} = req.body
     const userId = req.user.id
     try {
@@ -9,9 +18,18 @@ const createTask = async (req, res) => {
     } catch (error) {
         res.status(400).json({message: error.message});
     }
-}
+})
 
-const getTasks = async (req, res) => {
+
+/**
+ * Get all tasks for a user.
+ * @async
+ * @function getTasks
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>}
+ */
+const getTasks = expressAsyncHandler(async (req, res) => {
     const userId = req.user.id
     console.log(userId)
     try {
@@ -19,31 +37,55 @@ const getTasks = async (req, res) => {
     } catch (error) {
         res.status(404).json({message: error.message});
     }
-}
+})
 
-const getTask = async (req, res) => {
+/**
+ * Get a specific task by ID for a user.
+ * @async
+ * @function getTask
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>}
+ */
+const getTask = expressAsyncHandler(async (req, res) => {
     const {id} = req.params;
     const userId = req.user.id
     try {
-        res.status(200).json(await TaskSchema.findById({user: userId, id}));
+        res.status(200).json(await TaskSchema.findById({user: userId, _id: id}));
     } catch (error) {
         res.status(404).json({message: error.message});
     }
-}
+})
 
-const updateTask = async (req, res) => {
+/**
+ * Update a specific task by ID for a user.
+ * @async
+ * @function updateTask
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>}
+ */
+const updateTask = expressAsyncHandler(async (req, res) => {
     const {id} = req.params
     const task = req.body
     const userId = req.user.id
     try {
-        const updatedTask = await TaskSchema.findOneAndUpdate({ _id: id, user: userId }, task, { new: true });
+        const updatedTask = await TaskSchema.findOneAndUpdate({_id: id, user: userId}, task, {new: true});
         res.status(200).json({updatedTask})
     } catch (error) {
         res.status(404).json({message: error.message});
     }
-}
+})
 
-const deleteTask = async (req, res) => {
+/**
+ * Delete a specific task by ID for a user.
+ * @async
+ * @function deleteTask
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>}
+ */
+const deleteTask = expressAsyncHandler(async (req, res) => {
     const {id} = req.params;
     const userId = req.user.id
     try {
@@ -53,7 +95,7 @@ const deleteTask = async (req, res) => {
     } catch (error) {
         res.status(404).json({message: error.message});
     }
-}
+})
 
 /**
  * Exporting the task controller functions.
