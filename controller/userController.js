@@ -1,13 +1,21 @@
 import UserSchema from "../model/user.js";
+import expressAsyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 import validator from "validator";
 import dotenv from "dotenv";
-
-dotenv.config();
 import bcrypt from "bcrypt";
 
+dotenv.config();
 
-const signup = async (req, res) => {
+/**
+ * Sign up a new user.
+ * @async
+ * @function signup
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>}
+ */
+const signup = expressAsyncHandler(async (req, res) => {
     const {email, password} = req.body
 
     if (!validator.isEmail(email)) {
@@ -26,9 +34,17 @@ const signup = async (req, res) => {
         res.status(400).json({e: "Bad Request", details: e.message});
     }
 
-}
+})
 
-const login = async (req, res) => {
+/**
+ * Log in a user.
+ * @async
+ * @function login
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>}
+ */
+const login = expressAsyncHandler(async (req, res) => {
     const {email, password} = req.body;
 
     try {
@@ -55,7 +71,9 @@ const login = async (req, res) => {
         return res.status(500).json({status: 'error', error: 'An error occurred during login'});
     }
 
+});
 
-};
-
+/**
+ * Exporting the user controller functions.
+ */
 export {signup, login};
