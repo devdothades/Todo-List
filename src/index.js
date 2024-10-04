@@ -19,7 +19,8 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // routes
-
+import User from "./user/index.js"
+app.use("/api/v1/auth/", User);
 
 app.use("*", (req, res, next) => {
   next(new Error("404 Not Found"));
