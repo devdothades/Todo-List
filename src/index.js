@@ -20,6 +20,8 @@ if (process.env.NODE_ENV === "development") {
 
 // routes
 import User from "./user/index.js"
+import Task from "./tasks/index.js"
+app.use("/api/v1/task/", Task)
 app.use("/api/v1/auth/", User);
 
 app.use("*", (req, res, next) => {
