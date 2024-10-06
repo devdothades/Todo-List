@@ -13,18 +13,17 @@ const verifyJwt = async (req, res, next) => {
     }
 
     const token = getToken.split(" ")[1];
-    console.log(token);
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await UserSchema.findById(decoded.userID);
 
-        console.log(user)
         if (!user) {
             return res.status(401).json({message: "Invalid token or user not found"});
         }
 
         req.user = user;
+        next()
     } catch (err) {
         return res.status(403).json({message: "Invalid or expired token"});
     }
