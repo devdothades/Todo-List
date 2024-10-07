@@ -1,6 +1,7 @@
+import asyncHandler from "../utils/CatchAsync.util.js";
 import TaskSchema from "./Tasks.model.js";
 
-const createTask = async (req, res) => {
+const createTask = asyncHandler(async (req, res) => {
     const {task, status} = req.body;
     const user = req.user;
 
@@ -11,8 +12,9 @@ const createTask = async (req, res) => {
         res.status(500).send({Fail: "Something went wrong"});
     }
 
-}
-const deleteTask = async (req, res) => {
+})
+
+const deleteTask = asyncHandler(async (req, res) => {
     const taskId = req.params.id;
     const user = req.user;
 
@@ -24,8 +26,8 @@ const deleteTask = async (req, res) => {
     }
 
 
-}
-const updateTask = async (req, res) => {
+})
+const updateTask = asyncHandler(async (req, res) => {
     const {task, status} = req.body;
     const taskId = req.params.id;
     const user = req.user;
@@ -37,8 +39,8 @@ const updateTask = async (req, res) => {
         res.status(500).send({Fail: "Something went wrong"});
     }
 
-}
-const getTasks = async (req, res) => {
+})
+const getTasks = asyncHandler(async (req, res) => {
     const user = req.user;
 
     try {
@@ -48,6 +50,6 @@ const getTasks = async (req, res) => {
         res.status(500).send({Fail: "Something went wrong"});
     }
 
-}
+})
 
 export {createTask, deleteTask, getTasks, updateTask}

@@ -2,10 +2,11 @@ import UserSchema from "./User.model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from 'dotenv';
+import asyncHandler from "../utils/CatchAsync.util.js";
 dotenv.configDotenv();
 
 
-const login = async (req, res) => {
+const login = asyncHandler(async (req, res) => {
     const {username, password} = req.body;
 
     try {
@@ -34,10 +35,10 @@ const login = async (req, res) => {
         });
     }
 
-}
+})
 
 
-const register = async (req, res) => {
+const register = asyncHandler(async (req, res) => {
     try {
         const {username, password} = req.body;
 
@@ -51,6 +52,6 @@ const register = async (req, res) => {
         });
     }
 
-}
+})
 
 export {login, register};
