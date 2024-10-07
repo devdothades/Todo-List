@@ -34,6 +34,7 @@ npm install
 nano .env 
 PORT=YOUR DESIRED PORT
 DATABASE_URL=YOUT MONGO URI
+NODE_ENV=development
 JWT_SECRET=your-secret-key
 ```
 
