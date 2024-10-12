@@ -24,7 +24,7 @@ Before you begin, ensure you have the following installed:
 First, clone the repository from GitHub:
 
 ```bash
-git clone https://github.com/devdothades/todo-list-app.git
+https://github.com/devdothades/Todo-List.git
 cd todo-list-app
 npm install
 ```
